@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NY Soft Pretzels Recipe</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brown: #3d1f00;
+    --warm: #7a3b00;
+    --gold: #c8860a;
+    --cream: #fdf6e3;
+    --light: #fff9ee;
+    --salt: #f0e8d5;
+    --text: #2c1a00;
+    --muted: #7a6040;
+    --timer-bg: #3d1f00;
+    --timer-active: #c8860a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    font-family: 'Lora', Georgia, serif;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .card {
+    max-width: 780px;
+    margin: 0 auto;
+    background: var(--light);
+    border: 2px solid var(--brown);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 6px 6px 0 var(--brown);
+  }
+
+  /* Header */
+  .header {
+    background: var(--brown);
+    color: var(--cream);
+    padding: 2.5rem 2.5rem 2rem;
+    position: relative;
+  }
+
+  .pretzel-icon {
+    font-size: 3.5rem;
+    line-height: 1;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .header p {
+    color: #c9a87a;
+    font-style: italic;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .meta {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .meta-item span {
+    display: block;
+  }
+
+  .meta-item .label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #c9a87a;
+    font-style: normal;
+    font-family: 'Lora', serif;
+  }
+
+  .meta-item .value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--cream);
+    margin-top: 0.15rem;
+  }
+
+  /* Servings control */
+  .servings-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .servings-control button {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .servings-control button:hover {
+    background: var(--gold);
+    color: var(--brown);
+  }
+
+  .servings-control .count {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--cream);
+    min-width: 1.5rem;
+    text-align: center;
+  }
+
+  /* Body */
+  .body {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 0;
+  }
+
+  /* Ingredients */
+  .ingredients {
+    background: var(--salt);
+    padding: 2rem 1.75rem;
+    border-right: 2px solid var(--brown);
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--warm);
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid #c9a87a;
+  }
+
+  .ingredient-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .ingredient-group h4 {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+    font-style: normal;
+  }
+
+  .ingredient {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.35rem 0;
+    border-bottom: 1px dashed #d4c5a9;
+    font-size: 0.9rem;
+    gap: 0.5rem;
+  }
+
+  .ingredient:last-child { border-bottom: none; }
+
+  .ingredient .amount {
+    font-weight: 600;
+    color: var(--warm);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .ingredient .name {
+    color: var(--text);
+    text-align: right;
+    font-style: italic;
+  }
+
+  /* Steps */
+  .steps {
+    padding: 2rem 2rem;
+  }
+
+  .step {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 1.1rem;
+    top: 2.2rem;
+    bottom: -1.5rem;
+    width: 1px;
+    background: #d4c5a9;
+  }
+
+  .step-num {
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    background: var(--brown);
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .step-content { flex: 1; padding-top: 0.2rem; }
+
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--warm);
+    margin-bottom: 0.3rem;
+  }
+
+  .step-text {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: #3d2a10;
+  }
+
+  /* Timer */
+  .timer-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+    padding: 0.3rem 0.7rem;
+    background: var(--brown);
+    color: var(--cream);
+    border: none;
+    border-radius: 2px;
+    font-family: 'Lora', serif;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .timer-btn:hover { background: var(--warm); }
+  .timer-btn.running { background: var(--gold); color: var(--brown); }
+  .timer-btn.done { background: #4a7c3f; }
+
+  .timer-btn .icon { font-size: 0.9rem; }
+
+  /* Notes */
+  .notes {
+    background: #fef3d0;
+    border-top: 2px solid var(--brown);
+    padding: 1.5rem 2.5rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .notes-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 0.1rem; }
+
+  .notes p {
+    font-size: 0.87rem;
+    line-height: 1.65;
+    color: #4a3000;
+    font-style: italic;
+  }
+
+  /* Global timer display */
+  .active-timer {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--brown);
+    color: var(--cream);
+    padding: 1rem 1.5rem;
+    border-radius: 4px;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
+    font-family: 'Playfair Display', serif;
+    display: none;
+    min-width: 180px;
+    z-index: 999;
+  }
+
+  .active-timer.visible { display: block; }
+
+  .active-timer .timer-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #c9a87a;
+    font-family: 'Lora', serif;
+    margin-bottom: 0.3rem;
+  }
+
+  .active-timer .timer-display {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  .active-timer .timer-step {
+    font-size: 0.8rem;
+    color: #c9a87a;
+    font-family: 'Lora', serif;
+    font-style: italic;
+    margin-top: 0.2rem;
+  }
+
+  .active-timer .stop-btn {
+    margin-top: 0.75rem;
+    background: transparent;
+    border: 1px solid #c9a87a;
+    color: #c9a87a;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    font-family: 'Lora', serif;
+    border-radius: 2px;
+    width: 100%;
+  }
+
+  .active-timer .stop-btn:hover { background: rgba(255,255,255,0.1); }
+
+  @media (max-width: 600px) {
+    .body { grid-template-columns: 1fr; }
+    .ingredients { border-right: none; border-bottom: 2px solid var(--brown); }
+    .header h1 { font-size: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <!-- Header -->
+  <div class="header">
+    <span class="pretzel-icon">🥨</span>
+    <h1>New York-Style<br>Soft Pretzels</h1>
+    <p>Classic chewy, golden brown pretzels with a dark crust and salty finish</p>
+    <div class="meta">
+      <div class="meta-item">
+        <span class="label">Total Time</span>
+        <span class="value">~2 hrs 15 min</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Servings</span>
+        <div class="servings-control">
+          <button onclick="changeServings(-1)">−</button>
+          <span class="count" id="servings">12</span>
+          <button onclick="changeServings(1)">+</button>
+        </div>
+      </div>
+      <div class="meta-item">
+        <span class="label">Difficulty</span>
+        <span class="value">Intermediate</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="body">
+    <!-- Ingredients -->
+    <div class="ingredients">
+      <div class="section-title">Ingredients</div>
+
+      <div class="ingredient-group">
+        <h4>Pretzel Dough</h4>
+        <div class="ingredient">
+          <span class="amount" data-base="2.25" data-unit="tsp">2¼ tsp</span>
+          <span class="name">active dry yeast (1 envelope)</span>
+        </div>
+        <div class="ingredient">
+          <span class="amount" data-base="0.25" data-unit="tsp">¼ tsp</span>
+          <span class="name">fine-grain sea salt</span>
+        </div>
+        <div class="ingredient">
+          <span class="amount" data-base="2" data-unit="tsp">2 tsp</span>
+          <span class="name">sugar</span>
+        </div>
+        <div class="ingredient">
+          <span class="amount" data-base="1" data-unit="cup">1 cup</span>
+          <span class="name">warm water (100–110°F)</span>
+        </div>
+        <div class="ingredient">
+          <span class="amount" data-base="1" data-unit="cup">1 cup</span>
+          <span class="name">bread flour</span>
+        </div>
+        <div class="ingredient">
+          <span class="amount" data-base="2" data-unit="cup">2 cups</span>
+          <span class="name">all-purpose flour</span>
+        </div>
+      </div>
+
+      <div class="ingredient-group">
+        <h4>Baking Soda Bath</h4>
+        <div class="ingredient">
+          <span class="amount" data-base="8" data-unit="cup">8 cups</span>
+          <span class="name">water</span>
+        </div>
+        <div class="ingredient">
+          <span class="amount" data-base="0.5" data-unit="cup">½ cup</span>
+          <span class="name">baking soda</span>
+        </div>
+      </div>
+
+      <div class="ingredient-group">
+        <h4>Topping</h4>
+        <div class="ingredient">
+          <span class="amount" data-base="1" data-unit="">1</span>
+          <span class="name">egg yolk</span>
+        </div>
+        <div class="ingredient">
+          <span class="amount" data-base="1" data-unit="tbsp">1 tbsp</span>
+          <span class="name">water (for egg wash)</span>
+        </div>
+        <div class="ingredient">
+          <span class="amount" data-base="1" data-unit="tbsp">to taste</span>
+          <span class="name">coarse or pretzel salt</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Steps -->
+    <div class="steps">
+      <div class="section-title">Instructions</div>
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Make the Dough</div>
+          <div class="step-text">Combine yeast, salt, and sugar in a stand mixer bowl. Add warm water and mix until dissolved. Add both flours and mix on low with a dough hook for 4–5 minutes until dough pulls from the sides. (By hand: knead 5–7 minutes until smooth and elastic.)</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">First Rise</div>
+          <div class="step-text">Place dough in a greased bowl and cover with plastic wrap. Let rise in a warm spot until doubled in size.</div>
+          <button class="timer-btn" onclick="startTimer(this, 3150, 'First Rise')">
+            <span class="icon">⏱</span> Start Timer — 52 min
+          </button>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Preheat Oven</div>
+          <div class="step-text">Preheat oven to 450°F. Line two baking sheets with parchment paper and lightly grease.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Prepare Baking Soda Bath</div>
+          <div class="step-text">Bring 8 cups of water to a boil in a large pot, then add the baking soda. Keep at a steady boil.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-title">Shape Pretzels</div>
+          <div class="step-text">Divide dough into 12 equal pieces. Roll each piece into a 24-inch rope. Form a U-shape, cross the ends twice, then press the ends onto the bottom of the U to form the classic pretzel shape.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-content">
+          <div class="step-title">Boil Pretzels</div>
+          <div class="step-text">Drop pretzels one at a time into the boiling baking soda bath for 30 seconds each. Remove with a slotted spoon and place on prepared baking sheets.</div>
+          <button class="timer-btn" onclick="startTimer(this, 30, 'Boil — per pretzel')">
+            <span class="icon">⏱</span> Start Timer — 30 sec
+          </button>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">7</div>
+        <div class="step-content">
+          <div class="step-title">Add Egg Wash & Salt</div>
+          <div class="step-text">Whisk together the egg yolk and 1 tbsp water. Brush each pretzel evenly, then sprinkle generously with coarse salt.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">8</div>
+        <div class="step-content">
+          <div class="step-title">Bake</div>
+          <div class="step-text">Bake at 450°F for 12–14 minutes until dark golden brown.</div>
+          <button class="timer-btn" onclick="startTimer(this, 780, 'Bake')">
+            <span class="icon">⏱</span> Start Timer — 13 min
+          </button>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">9</div>
+        <div class="step-content">
+          <div class="step-title">Serve</div>
+          <div class="step-text">Best served warm. Great with mustard!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes -->
+  <div class="notes">
+    <span class="notes-icon">💡</span>
+    <p>Keep water between 100–110°F for proper yeast activation. The baking soda bath is what gives pretzels their signature dark color and chewy texture — don't skip it! The egg wash helps the salt stick and adds shine. If you're new to pretzel shaping, a quick video search makes it easy to follow along.</p>
+  </div>
+</div>
+
+<!-- Floating timer -->
+<div class="active-timer" id="activeTimer">
+  <div class="timer-label">Active Timer</div>
+  <div class="timer-display" id="timerDisplay">0:00</div>
+  <div class="timer-step" id="timerStep"></div>
+  <button class="stop-btn" onclick="stopTimer()">Stop Timer</button>
+</div>
+
+<script>
+  const BASE_SERVINGS = 12;
+  let currentServings = 12;
+  let timerInterval = null;
+  let timerSeconds = 0;
+  let activeBtn = null;
+
+  // Servings scaling
+  function changeServings(delta) {
+    const newVal = currentServings + delta;
+    if (newVal < 1) return;
+    currentServings = newVal;
+    document.getElementById('servings').textContent = currentServings;
+    updateAmounts();
+  }
+
+  function formatAmount(base, ratio) {
+    const val = base * ratio;
+    // Try to express as a nice fraction
+    if (val === Math.floor(val)) return val % 1 === 0 ? val.toString() : val.toFixed(1);
+    const fracs = [[0.25,'¼'],[0.5,'½'],[0.75,'¾'],[0.33,'⅓'],[0.67,'⅔']];
+    const whole = Math.floor(val);
+    const rem = val - whole;
+    let fracStr = '';
+    for (const [f, s] of fracs) {
+      if (Math.abs(rem - f) < 0.05) { fracStr = s; break; }
+    }
+    if (fracStr) return whole > 0 ? `${whole}${fracStr}` : fracStr;
+    return val < 0.1 ? val.toFixed(2) : val.toFixed(1);
+  }
+
+  function updateAmounts() {
+    const ratio = currentServings / BASE_SERVINGS;
+    document.querySelectorAll('.amount[data-base]').forEach(el => {
+      const base = parseFloat(el.dataset.base);
+      const unit = el.dataset.unit;
+      if (!base) return;
+      const amt = formatAmount(base, ratio);
+      el.textContent = unit ? `${amt} ${unit}` : amt;
+    });
+  }
+
+  // Timer
+  function startTimer(btn, seconds, label) {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      if (activeBtn) { activeBtn.className = 'timer-btn'; }
+    }
+
+    timerSeconds = seconds;
+    activeBtn = btn;
+    btn.classList.add('running');
+
+    document.getElementById('timerStep').textContent = label;
+    document.getElementById('activeTimer').classList.add('visible');
+    updateTimerDisplay();
+
+    timerInterval = setInterval(() => {
+      timerSeconds--;
+      updateTimerDisplay();
+      if (timerSeconds <= 0) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        btn.classList.remove('running');
+        btn.classList.add('done');
+        btn.innerHTML = '<span class="icon">✓</span> Done!';
+        document.getElementById('timerDisplay').textContent = 'Done!';
+        // Try to play a beep
+        try {
+          const ctx = new (window.AudioContext || window.webkitAudioContext)();
+          for (let i = 0; i < 3; i++) {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.frequency.value = 880;
+            gain.gain.setValueAtTime(0.3, ctx.currentTime + i * 0.4);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.4 + 0.3);
+            osc.start(ctx.currentTime + i * 0.4);
+            osc.stop(ctx.currentTime + i * 0.4 + 0.3);
+          }
+        } catch(e) {}
+      }
+    }, 1000);
+  }
+
+  function updateTimerDisplay() {
+    const m = Math.floor(timerSeconds / 60);
+    const s = timerSeconds % 60;
+    document.getElementById('timerDisplay').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  }
+
+  function stopTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = null;
+    if (activeBtn) { activeBtn.className = 'timer-btn'; activeBtn.classList.remove('done'); }
+    document.getElementById('activeTimer').classList.remove('visible');
+  }
+</script>
+</body>
+</html>
